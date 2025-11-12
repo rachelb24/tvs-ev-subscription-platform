@@ -1,0 +1,51 @@
+/* Minimal global resets (keeps header/footer unaffected) */
+html, body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  overflow-x: hidden; /* <- Prevent global horizontal scroll */
+}
+/* Table wrapper: confined scrolling area */
+.table-scroll-wrapper {
+  width: 100%;
+  /* account for the Box p:3 (24px left + 24px right total = 48px) */
+  max-width: calc(100vw - 48px);
+  max-height: 70vh;           /* contains vertical scrolling inside wrapper */
+  overflow-x: auto;          /* horizontal scroll only inside this box */
+  overflow-y: auto;
+  box-sizing: border-box;
+  border-radius: 8px;
+  background: #fff;
+  padding: 8px;
+}
+/* Ensure the MUI Paper / TableContainer inside behaves & doesn't expand outside */
+.table-scroll-wrapper > .MuiPaper-root {
+  display: inline-block;   /* shrink to table width */
+  min-width: 100%;         /* keep responsiveness */
+  box-sizing: border-box;
+}
+/* Make the table size to its content, but remain inside the wrapper */
+.table-scroll-wrapper table {
+  display: inline-table;   /* prevents table from forcing parent width */
+  width: max-content;
+  border-collapse: collapse;
+  table-layout: auto;
+}
+/* Small styling for cells + smooth scrollbar */
+.table-scroll-wrapper th,
+.table-scroll-wrapper td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #E0E0E0;
+  text-align: left;
+  white-space: nowrap;
+}
+/* Scrollbar visuals (optional) */
+.table-scroll-wrapper::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+.table-scroll-wrapper::-webkit-scrollbar-thumb {
+  background-color: #aaa;
+  border-radius: 10px;
+}
+.table-scroll-wrapper::-webkit-scrollbar-thumb:hover { background-color: #777; }

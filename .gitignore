@@ -1,0 +1,21 @@
+# Node.js
+node_modules/
+dist/
+build/
+.env
+
+# Java / Spring Boot
+target/
+*.jar
+*.war
+*.class
+
+# Python / IDE / Misc
+__pycache__/
+*.log
+.idea/
+.vscode/
+
+# System files
+*.DS_Store
+Thumbs.db

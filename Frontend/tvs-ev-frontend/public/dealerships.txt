@@ -1,0 +1,45 @@
+TVS Anna Salai | Tamil Nadu | 13.0601 | 80.2640 | Anna Salai, Chennai
+TVS Adyar Motors | Tamil Nadu | 13.0067 | 80.2570 | Adyar, Chennai
+TVS Coimbatore Central | Tamil Nadu | 11.0168 | 76.9558 | Gandhipuram, Coimbatore
+TVS Trichy Junction | Tamil Nadu | 10.7905 | 78.7047 | Railway Station Road, Trichy
+TVS Madurai South | Tamil Nadu | 9.9252 | 78.1198 | Arasaradi, Madurai
+
+TVS Bangalore Residency Road | Karnataka | 12.9716 | 77.5946 | Residency Road, Bangalore
+TVS Mysore VV Market | Karnataka | 12.2958 | 76.6394 | VV Mohalla, Mysore
+TVS Hubballi Central | Karnataka | 15.3647 | 75.1240 | Vidya Nagar, Hubballi
+TVS Mangalore City Gate | Karnataka | 12.9141 | 74.8560 | Hampankatta, Mangalore
+
+TVS Pune Camp | Maharashtra | 18.5101 | 73.8800 | Camp Area, Pune
+TVS Mumbai Andheri | Maharashtra | 19.1136 | 72.8697 | Andheri East, Mumbai
+TVS Nagpur Civil Lines | Maharashtra | 21.1466 | 79.0886 | Civil Lines, Nagpur
+TVS Nashik Main | Maharashtra | 19.9975 | 73.7898 | College Road, Nashik
+
+TVS Connaught Place | Delhi | 28.6270 | 77.2167 | Connaught Place, New Delhi
+TVS Rohini Sector 9 | Delhi | 28.7041 | 77.1025 | Rohini, New Delhi
+TVS Lajpat Nagar | Delhi | 28.5687 | 77.2433 | Lajpat Nagar, New Delhi
+TVS Janakpuri District Center | Delhi | 28.6226 | 77.0923 | Janakpuri, New Delhi
+
+TVS Hyderabad Somajiguda | Telangana | 17.4203 | 78.4543 | Somajiguda, Hyderabad
+TVS Secunderabad | Telangana | 17.4399 | 78.4983 | SD Road, Secunderabad
+TVS Warangal Hanamkonda | Telangana | 18.0030 | 79.5583 | Hanamkonda Chowrasta, Warangal
+TVS Khammam Central | Telangana | 17.2485 | 80.1423 | Wyra Road, Khammam
+
+TVS Kolkata Gariahat | West Bengal | 22.5250 | 88.3654 | Gariahat Road, Kolkata
+TVS Salt Lake Sector V | West Bengal | 22.5800 | 88.4273 | Sector V, Salt Lake, Kolkata
+TVS Siliguri Junction | West Bengal | 26.7271 | 88.3953 | Hill Cart Road, Siliguri
+TVS Howrah Market | West Bengal | 22.5958 | 88.2636 | Howrah Maidan, Howrah
+
+TVS Kochi MG Road | Kerala | 9.9688 | 76.2999 | MG Road, Kochi
+TVS Thiruvananthapuram Central | Kerala | 8.5241 | 76.9366 | Statue Junction, Trivandrum
+TVS Kozhikode City | Kerala | 11.2588 | 75.7804 | Mavoor Road, Kozhikode
+TVS Thrissur Swaraj Round | Kerala | 10.5276 | 76.2144 | Round North, Thrissur
+
+TVS Jaipur Tonk Road | Rajasthan | 26.8949 | 75.8034 | Tonk Road, Jaipur
+TVS Udaipur Hiran Magri | Rajasthan | 24.5854 | 73.7125 | Hiran Magri, Udaipur
+TVS Jodhpur Sardarpura | Rajasthan | 26.2854 | 73.0180 | Sardarpura, Jodhpur
+TVS Kota City Mall Road | Rajasthan | 25.1458 | 75.8456 | Mall Road, Kota
+
+TVS Ahmedabad SG Highway | Gujarat | 23.0458 | 72.5248 | SG Highway, Ahmedabad
+TVS Surat Varachha | Gujarat | 21.2049 | 72.8406 | Varachha, Surat
+TVS Vadodara Alkapuri | Gujarat | 22.3072 | 73.1812 | Alkapuri, Vadodara
+TVS Rajkot Yagnik Road | Gujarat | 22.3039 | 70.8022 | Yagnik Road, Rajkot

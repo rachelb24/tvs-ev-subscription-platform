@@ -1,0 +1,24 @@
+Terms and Conditions — TVS Subscription Services
+
+Welcome to TVS Subscription Services. By proceeding with the purchase of a subscription plan, you agree to abide by the following terms and conditions. Please read them carefully before confirming your payment.
+
+1. Service Overview
+TVS Subscription provides users access to digital content, analytics, and tools based on the selected plan. Plans are valid for the subscription duration and are non-transferable.
+
+2. Payment and Billing
+All payments are processed securely via Razorpay. By confirming your payment, you authorize TVS to charge the applicable amount. Refunds are processed only under exceptional circumstances as per our refund policy.
+
+3. Plan Validity
+Each plan is valid from the activation date to its expiry date. Users are responsible for ensuring timely renewal to continue access to services.
+
+4. Data Privacy
+TVS respects user privacy and ensures that all personal and payment information is handled in accordance with applicable data protection laws. Data is never shared with third parties without consent.
+
+5. Cancellation Policy
+You may cancel your subscription at any time. However, cancellations after payment will not be eligible for refunds unless explicitly stated by TVS Support.
+
+6. Modifications
+TVS reserves the right to modify these terms at any time. Users will be notified in case of significant changes that impact their subscription.
+
+7. Contact
+For any queries, please contact our support team at **support@tvs-subscription.com**.

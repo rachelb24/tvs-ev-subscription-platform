@@ -1,0 +1,45 @@
+stages:
+  - build
+  - push
+  - deploy
+
+variables:
+  DOCKER_IMAGE: harshrawat02/$SERVICE_NAME
+  DOCKER_TAG: dev
+
+before_script:
+  - echo "Logging into Docker Hub..."
+  - docker login -u "$DOCKER_HUB_USERNAME" -p "$DOCKER_HUB_PASSWORD"
+
+build:
+  stage: build
+  script:
+    - echo "Building Docker image for $SERVICE_NAME..."
+    - docker build -t $DOCKER_IMAGE:$DOCKER_TAG .
+  only:
+    - main
+    - master
+
+push:
+  stage: push
+  script:
+    - echo "Pushing image to Docker Hub..."
+    - docker push $DOCKER_IMAGE:$DOCKER_TAG
+  only:
+    - main
+    - master
+
+deploy:
+  stage: deploy
+  script:
+    - echo "Deploying $SERVICE_NAME on Azure VM via SSH..."
+    - apt-get update -qy && apt-get install -y sshpass
+    - sshpass -p "$AZURE_VM_PASSWORD" ssh -o StrictHostKeyChecking=no $AZURE_VM_USER@$AZURE_VM_IP "
+        docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD &&
+        cd /home/$AZURE_VM_USER/project &&
+        docker-compose pull $SERVICE_NAME &&
+        docker-compose up -d $SERVICE_NAME
+      "
+  only:
+    - main
+    - master
