@@ -1,9 +1,5 @@
-// src/services/paymentService.js
 import api from "/src/services/api.js";
-/**
- * Create razorpay order on server for given planId.
- */
-export async function initiatePayment(planId, tokenParam) {
+export async function initiatePayment(planId, tokenParam, payload = null) {
   try {
     const token = tokenParam ?? localStorage.getItem("token");
     if (!token) throw new Error("Missing auth token. Please login.");
@@ -11,11 +7,8 @@ export async function initiatePayment(planId, tokenParam) {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     };
-    const response = await api.post(
-      "/api/payments/create",
-      { planId },
-      { headers }
-    );
+    const body = payload && typeof payload === "object" ? { planId, ...payload } : { planId };
+    const response = await api.post("/api/payments/create", body, { headers });
     return response.data;
   } catch (error) {
     console.error("Error initiating payment:", error);
@@ -27,19 +20,17 @@ export async function initiatePayment(planId, tokenParam) {
     throw new Error(`Payment creation failed: ${JSON.stringify(errMsg)}`);
   }
 }
+/* rest of the file unchanged: assignFreePlan and verifyPaymentAndAssign */
 export async function assignFreePlan(userId, planId) {
   try {
-    // :one: Assign free plan to orders
     const orderAssignUrl = `/api/orders/${encodeURIComponent(userId)}/assign-free/${encodeURIComponent(planId)}`;
     const orderResponse = await api.post(orderAssignUrl, null, {
       headers: { "Content-Type": "application/json" },
     });
-    // :two: Assign free plan to subscriptions
     const subscriptionAssignUrl = `/api/subscriptions/${encodeURIComponent(userId)}/assign-free/${encodeURIComponent(planId)}`;
     const subscriptionResponse = await api.post(subscriptionAssignUrl, null, {
       headers: { "Content-Type": "application/json" },
     });
-    // Return both responses (optional)
     return {
       order: orderResponse.data,
       subscription: subscriptionResponse.data,
@@ -54,11 +45,6 @@ export async function assignFreePlan(userId, planId) {
     throw new Error(`Free plan assignment failed: ${errMsg}`);
   }
 }
-
-/**
- * Verify razorpay response (server) and then call orders + subscriptions assign endpoints.
- * Both must succeed, or both are treated as failed.
- */
 export async function verifyPaymentAndAssign(
   razorpayResponse,
   userId,
@@ -66,7 +52,6 @@ export async function verifyPaymentAndAssign(
   internalPaymentIdParam
 ) {
   try {
-    // :one: Verify payment on payment-service
     const verifyResp = await api.post("/api/payments/verify", {
       razorpay_order_id: razorpayResponse.razorpay_order_id,
       razorpay_payment_id: razorpayResponse.razorpay_payment_id,
@@ -106,7 +91,6 @@ export async function verifyPaymentAndAssign(
     const assignSubscriptionUrl = `/api/subscriptions/${encodeURIComponent(
       userId
     )}/assign/${encodeURIComponent(planId)}`;
-    //  Helper for safe POST
     const tryPost = async (url) => {
       try {
         const resp = await api.post(url, null, { headers });
@@ -121,7 +105,6 @@ export async function verifyPaymentAndAssign(
         throw err;
       }
     };
-    // :two: Assign to order first
     let orderAssignResp;
     try {
       orderAssignResp = await tryPost(assignOrderUrl);
@@ -129,19 +112,15 @@ export async function verifyPaymentAndAssign(
       console.error("Order assignment failed:", err1);
       throw new Error(`Order assignment failed: ${err1._msg}`);
     }
-    // :three: Assign to subscription
     let subscriptionAssignResp;
     try {
       subscriptionAssignResp = await tryPost(assignSubscriptionUrl);
     } catch (err2) {
       console.error("Subscription assignment failed:", err2);
-      // Optional rollback comment (for future backend support)
-      // await api.delete(`/api/orders/${userId}/unassign/${planId}`, { headers }).catch(() => {});
       throw new Error(
         `Subscription assignment failed: ${err2._msg}. Order assignment succeeded, but subscription failed.`
       );
     }
-    // :white_check_mark: Both succeeded
     return {
       status: "SUCCESS",
       message: "Order and Subscription assigned successfully.",

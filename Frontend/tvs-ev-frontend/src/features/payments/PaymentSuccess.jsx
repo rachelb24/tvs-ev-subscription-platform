@@ -23,6 +23,7 @@ const PaymentSuccess = () => {
   const [loading, setLoading] = useState(true);
   const paymentId = state?.paymentId || "N/A";
   const paymentDate = state?.paymentDate ? new Date(state.paymentDate).toLocaleString() : "Unknown";
+  const amountPaid = state?.amountPaid || null;
   useEffect(() => {
     const loadPlan = async () => {
       try {
@@ -86,12 +87,18 @@ const PaymentSuccess = () => {
                   <Chip key={f.featureId} label={`${f.name}: ${f.defaultIncludedUnits} units`} size="small" />
                 ))}
               </Stack>
-              <Typography variant="h6" mt={2}>
-                ₹
-                {plan.isDiscountActive && plan.discountedPrice < plan.totalPrice
-                  ? plan.discountedPrice
-                  : plan.totalPrice}
-              </Typography>
+              {amountPaid != null ? (
+  <Typography variant="h6" mt={2}>
+    <strong>Amount Paid:</strong> ₹{amountPaid}
+  </Typography>
+) : (
+  <Typography variant="h6" mt={2}>
+    ₹
+    {plan.isDiscountActive && plan.discountedPrice < plan.totalPrice
+      ? plan.discountedPrice
+      : plan.totalPrice}
+  </Typography>
+)}
             </CardContent>
           </Card>
         )}

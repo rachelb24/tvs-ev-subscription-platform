@@ -114,7 +114,7 @@ const Register = () => {
 
       try {
         if (userId) {
-          const freePlanId = "34d63e2d-78e4-473d-8752-66d02686ebf9";
+          const freePlanId = "b9c5f31b-ae41-42b8-a5fe-a43b4ad97939";
           await assignFreePlan(userId, freePlanId);
         }
       } catch {}

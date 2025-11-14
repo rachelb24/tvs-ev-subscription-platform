@@ -39,7 +39,6 @@ import {
 } from "recharts";
 import { decodeToken } from "../../utils/jwtUtils";
 import { useNavigate } from "react-router-dom";
-
 export default function PlanUsage() {
   const [usageData, setUsageData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -47,12 +46,10 @@ export default function PlanUsage() {
   const [featureHistory, setFeatureHistory] = useState([]);
   const [historyLoading, setHistoryLoading] = useState(false);
   const [subscriptionId, setSubscriptionId] = useState(null);
-
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const decoded = decodeToken(token);
   const email = decoded?.sub || null;
-
   const fetchUserAndUsage = async () => {
     if (!token || !email) {
       setLoading(false);
@@ -65,16 +62,19 @@ export default function PlanUsage() {
       });
       if (!userRes.ok) throw new Error("User not found");
       let userId = (await userRes.text()).replace(/"/g, "");
-
       const subRes = await fetch(`http://localhost:8083/api/subscriptions/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const subs = await subRes.json();
-      const activeSub = subs.find((s) => s.isActive) || subs[subs.length - 1];
+subs.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+let activeSub = subs.find((s) => s.isActive);
+// if multiple active with same date, pick the one created last
+if (!activeSub && subs.length > 0) {
+  activeSub = subs[0];
+}
+if (!activeSub?.id) throw new Error("No active subscription found");
       if (!activeSub?.id) throw new Error("No active subscription");
-
       setSubscriptionId(activeSub.id);
-
       const usageRes = await fetch(
         `http://localhost:8083/api/plan-usage/${activeSub.id}`,
         { headers: { Authorization: `Bearer ${token}` } }
@@ -88,16 +88,13 @@ export default function PlanUsage() {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     fetchUserAndUsage();
   }, []);
-
   const handleViewHistory = (feature) => {
     setSelectedFeature(feature);
     fetchFeatureHistory(feature.featureName);
   };
-
   const fetchFeatureHistory = async (featureName) => {
     if (!token || !subscriptionId) return;
     setHistoryLoading(true);
@@ -117,12 +114,10 @@ export default function PlanUsage() {
       setHistoryLoading(false);
     }
   };
-
   const handleCloseHistory = () => {
     setSelectedFeature(null);
     setFeatureHistory([]);
   };
-
   const handleBookFeature = (feature) => {
     const used = Number(feature.usedUnits ?? 0);
     const total = Number(feature.totalUnits ?? 0);
@@ -136,7 +131,6 @@ export default function PlanUsage() {
       state: { subscriptionId, featureName: feature.featureName, usedUnits: used, totalUnits: total },
     });
   };
-
   // Format data for chart
   const chartData = usageData.map((f) => {
     const used = Number(f.usedUnits ?? 0);
@@ -146,7 +140,6 @@ export default function PlanUsage() {
     const remainingPercent = 100 - usedPercent;
     return { name: f.featureName, used, remaining, usedPercent, remainingPercent };
   });
-
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 6 }}>
       {/* Header */}
@@ -160,7 +153,6 @@ export default function PlanUsage() {
           </IconButton>
         </Tooltip>
       </Box>
-
       {loading ? (
         <Box display="flex" justifyContent="center" alignItems="center" minHeight="200px">
           <CircularProgress />
@@ -178,7 +170,7 @@ export default function PlanUsage() {
             <CardContent>
               <TableContainer component={Paper} sx={{ borderRadius: 2, overflow: "hidden" }}>
                 <Table>
-                  <TableHead sx={{ backgroundColor: "#f9fafb" }}>
+                  <TableHead sx={{ backgroundColor: "#F9FAFB" }}>
                     <TableRow>
                       <TableCell sx={{ fontWeight: 600 }}>Feature Name</TableCell>
                       <TableCell sx={{ fontWeight: 600 }}>Used Units</TableCell>
@@ -194,7 +186,7 @@ export default function PlanUsage() {
                       const progress = total > 0 ? (used / total) * 100 : 0;
                       const isFull = used >= total;
                       return (
-                        <TableRow key={i} sx={{ "&:hover": { backgroundColor: "#f5f5f5" } }}>
+                        <TableRow key={i} sx={{ "&:hover": { backgroundColor: "#F5F5F5" } }}>
                           <TableCell>{feature.featureName}</TableCell>
                           <TableCell>{used}</TableCell>
                           <TableCell>{total}</TableCell>
@@ -207,8 +199,8 @@ export default function PlanUsage() {
                                   flexGrow: 1,
                                   height: 8,
                                   borderRadius: 5,
-                                  "& .MuiLinearProgress-bar": { backgroundColor: "#0a4da3" },
-                                  backgroundColor: "#d6d6d6",
+                                  "& .MuiLinearProgress-bar": { backgroundColor: "#0A4DA3" },
+                                  backgroundColor: "#D6D6D6",
                                 }}
                               />
                               <Typography variant="body2" sx={{ minWidth: 40 }}>
@@ -252,13 +244,11 @@ export default function PlanUsage() {
               </TableContainer>
             </CardContent>
           </Card>
-
-{/* ✅ Feature Usage Comparison Chart */}
+          {/* :white_check_mark: Feature Usage Comparison Chart */}
 <Card sx={{ mt: 4, p: 3, borderRadius: 3, boxShadow: "0 4px 12px rgba(0,0,0,0.08)" }}>
   <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>
     Feature Usage Comparison
   </Typography>
-
   <Box sx={{ height: 320 }}>
     <ResponsiveContainer width="100%" height="100%">
       <BarChart
@@ -273,21 +263,17 @@ export default function PlanUsage() {
           width={160}
           tick={{ fontSize: 13, fill: "#333" }}
         />
-
-        {/* ✅ Custom Tooltip (clean display) */}
+        {/* :white_check_mark: Custom Tooltip (clean display) */}
         <RechartTooltip
           content={({ payload }) => {
             if (!payload || payload.length === 0) return null;
             const data = payload[0].payload;
-            
             const used = data.used;
             const remaining = data.remaining;
-
             // dynamic used color
             const usedColor =
-              data.usedPercent >= 100 ? "#d32f2f" : 
-              data.usedPercent >= 65 ? "#ffb300" : "#0a4da3";
-
+              data.usedPercent >= 100 ? "#D32F2F" :
+              data.usedPercent >= 65 ? "#FFB300" : "#0A4DA3";
             return (
               <Box sx={{
                 background: "#fff",
@@ -301,26 +287,24 @@ export default function PlanUsage() {
                 <Typography sx={{ color: usedColor, fontWeight: 600 }}>
                   Used: {used} units
                 </Typography>
-                <Typography sx={{ color: "#6c757d", fontWeight: 500 }}>
+                <Typography sx={{ color: "#6C757D", fontWeight: 500 }}>
                   Remaining: {remaining} units
                 </Typography>
               </Box>
             );
           }}
         />
-
-        {/* ✅ Clean Legend */}
+        {/* :white_check_mark: Clean Legend */}
         <Legend
           formatter={(value) =>
             value === "usedPercent" ? "Used Units" : "Remaining Units"
           }
           payload={[
-            { id: "used", type: "square", value: "Used Units", color: "#0a4da3" },
-            { id: "remaining", type: "square", value: "Remaining Units", color: "#d6d6d6" }
+            { id: "used", type: "square", value: "Used Units", color: "#0A4DA3" },
+            { id: "remaining", type: "square", value: "Remaining Units", color: "#D6D6D6" }
           ]}
         />
-
-        {/* 🎨 Dynamic Used Bar Color */}
+        {/*  Dynamic Used Bar Color */}
         <Bar
           dataKey="usedPercent"
           name="Used Units"
@@ -329,18 +313,17 @@ export default function PlanUsage() {
           radius={[4, 0, 0, 4]}
           isAnimationActive={true}
           fill={({ usedPercent }) =>
-            usedPercent >= 100 ? "#d32f2f" : // 🔥 RED when full
-            usedPercent >= 65 ? "#ffb300" : // 🟡 YELLOW warning
-            "#0a4da3"                       // 💙 BLUE normal
+            usedPercent >= 100 ? "#D32F2F" : //  RED when full
+            usedPercent >= 65 ? "#FFB300" : //  YELLOW warning
+            "#0A4DA3"                       //  BLUE normal
           }
         />
-
-        {/* 🩶 Remaining Portion */}
+        {/* 勇 Remaining Portion */}
         <Bar
           dataKey="remainingPercent"
           name="Remaining Units"
           stackId="usage"
-          fill="#d6d6d6"
+          fill="#D6D6D6"
           barSize={30}
           radius={[0, 4, 4, 0]}
           isAnimationActive={true}
@@ -349,10 +332,8 @@ export default function PlanUsage() {
     </ResponsiveContainer>
   </Box>
 </Card>
-
         </>
       )}
-
       {/* History Modal */}
       <Dialog open={!!selectedFeature} onClose={handleCloseHistory} maxWidth="sm" fullWidth>
         <DialogTitle>Usage History — {selectedFeature?.featureName}</DialogTitle>
